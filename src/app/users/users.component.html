@@ -1,0 +1,43 @@
+<div *ngIf="loading">Загрузка...</div>
+<div>
+  <input type="text" placeholder="Поиск по имени..." (input)="onSearch($event)">
+  <table class="users-table">
+    <thead>
+    <tr>
+      <th>Имя пользователя</th>
+      <th>Действия</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr *ngFor="let user of users">
+      <td>{{ user.user_name }}</td>
+      <td>
+        <button (click)="onDelete(user.id)">Удалить</button>
+      </td>
+    </tr>
+    </tbody>
+  </table>
+  <!-- Элементы управления пагинацией -->
+  <div class="pagination">
+    <!-- Выпадающий список для выбора количества элементов на странице -->
+    <div class="items-per-page">
+      <label for="itemsPerPage">Элементов на странице:</label>
+      <select id="itemsPerPage" (change)="onItemsPerPageChange($event)">
+        <option value="5">5</option>
+        <option value="10" selected>10</option>
+        <option value="20">20</option>
+      </select>
+    </div>
+
+    <button (click)="goToPage(1)" [disabled]="currentPage === 1">Первая</button>
+    <button (click)="goToPage(currentPage - 1)" [disabled]="currentPage === 1">Предыдущая</button>
+
+    <!-- Динамически создаваемые кнопки для страниц -->
+    <button *ngFor="let page of [].constructor(totalPages); let i = index"
+            (click)="goToPage(i + 1)"
+            [disabled]="currentPage === i + 1">{{ i + 1 }}</button>
+
+    <button (click)="goToPage(currentPage + 1)" [disabled]="currentPage === totalPages">Следующая</button>
+    <button (click)="goToPage(totalPages)" [disabled]="currentPage === totalPages">Последняя</button>
+  </div>
+</div>
